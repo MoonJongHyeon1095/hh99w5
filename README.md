@@ -1,5 +1,4 @@
 # ERD
-![ERD](./img/drawSQL-export-2022-10-11_22_48.png)
 
 ***
 
