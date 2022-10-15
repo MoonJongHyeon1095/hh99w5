@@ -1,4 +1,4 @@
-const UserService = require('../services/users.service');
+const UserService = require('../service/users.service');
 
 class UsersController {}
 
