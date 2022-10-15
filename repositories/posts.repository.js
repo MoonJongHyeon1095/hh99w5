@@ -1,4 +1,4 @@
-const { Posts } = require('../models');
+const { Post } = require('../models');
 
 class PostRepository {}
 

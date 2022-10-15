@@ -1,4 +1,4 @@
-const { Comments } = require('../models');
+const { Comment } = require('../models');
 
 class CommentRepository {}
 
