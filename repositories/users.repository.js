@@ -1,5 +1,27 @@
 const { User } = require('../models');
+const { Op } = require("sequelize");
 
-class UserRepository {}
+class UserRepository {
+    
+    createUser = async (nickname, password) => {
+        const createUserData = await User.create({
+          nickname,
+          password
+        });
+    
+        return createUserData;
+      };
+
+    findUser = async (nickname, password) => {
+        const user = await User.findOne({
+            where: {
+              [Op.and]: [{ nickname }, { password }],
+            },
+          });
+    
+        return user;
+      };  
+
+}
 
 module.exports = UserRepository;

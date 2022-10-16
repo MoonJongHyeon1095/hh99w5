@@ -48,7 +48,8 @@ class PostService {
       title,
       content
     );
-
+    
+    console.log(createPostData)
     return {
       postId: createPostData.null,
       userId: createPostData.userId,
