@@ -4,7 +4,6 @@ require('dotenv').config();
 module.exports = (req, res, next) => {
   try {
     const cookies = req.cookies[process.env.COOKIE_NAME];
-    console.log(cookies)
     if (cookies) {
       return res.status(403).send({
         errorMessage: '이미 로그인이 되어있습니다.',
