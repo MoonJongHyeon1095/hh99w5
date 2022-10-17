@@ -20,7 +20,16 @@ class UserRepository {
           });
     
         return user;
-      };  
+      }; 
+      
+      findByNickname = async (nickname) => {
+        const user = await User.findAll({
+          where: {
+            nickname,
+          },
+        });
+        return user;
+      };
 
 }
 

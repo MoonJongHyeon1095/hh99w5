@@ -63,7 +63,7 @@ class PostService {
 
   updatePost = async (postId, userId, title, content) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error("Post doesn't exist");
+    if (!findPost) throw new Error("게시글이 존재하지 않는데요.");
 
     await this.postRepository.updatePost(postId, userId, title, content);
 
@@ -83,7 +83,7 @@ class PostService {
 
   deletePost = async (postId, userId) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error("Post doesn't exist");
+    if (!findPost) throw new Error("게시글이 존하지 않는데요.");
 
     await this.postRepository.deletePost(postId, userId);
 
