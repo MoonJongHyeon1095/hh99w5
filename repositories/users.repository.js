@@ -3,10 +3,10 @@ const { Op } = require("sequelize");
 
 class UserRepository {
     
-    createUser = async (nickname, password) => {
+    createUser = async (nickname, hashed) => {
         const createUserData = await User.create({
           nickname,
-          password
+          hashed
         });
     
         return createUserData;

@@ -32,8 +32,6 @@ class PostsController {
     try {
       const { userId } = res.locals.user;
       const { nickname } = res.locals.user;
-      console.log(userId);
-      console.log(nickname);
       const { title, content } = req.body;
 
       if (!userId || !title || !content) {
@@ -114,11 +112,6 @@ class PostsController {
     try {
       const { postId } = req.params;
       const { userId } = res.locals.user;
-
-      if (!postId) {
-        // TODO: Joi를 사용하지 않음
-        throw new InvalidParamsError('게시글이 존재하지 않습니다.');
-      }
 
       const Likes = await this.postService.updatePostLike(userId, postId);
 

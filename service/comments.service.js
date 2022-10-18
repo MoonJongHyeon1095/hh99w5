@@ -45,9 +45,9 @@ class CommentService {
   };
 
   updateComment = async (commentId, comment, userId) => {
-    console.log(commentId)
+    
     const isExistComment = await this.commentRepository.findCommentById(commentId);
-    console.log(isExistComment)
+    
     if (!isExistComment) throw new ValidationError('그런 댓글이 없어....');
 
     const updatedComment = await this.commentRepository.updateComment(

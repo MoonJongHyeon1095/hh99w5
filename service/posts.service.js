@@ -138,25 +138,13 @@ class PostService {
       const LikeData = await this.postRepository.createPostLike({userId, postId});
       console.log(LikeData);
       return {
-        postId: LikeData.postId,
-        userId: LikeData.userId,
-        nickname: LikeData.nickname,
-        title: LikeData.title,
-        likes: LikeData.likes,
+       LikeData
       };
     } else if (isLike) {
-      const LikeData = await this.postRepository.deletePostLike({
-        userId,
-        postId,
-      });
+      const LikeData = await this.postRepository.deletePostLike({userId,postId,});
 
-      console.log(LikeData);
       return {
-        postId: LikeData.postId,
-        userId: LikeData.userId,
-        nickname: LikeData.nickname,
-        title: LikeData.title,
-        likes: LikeData.likes,
+        LikeData
       };
     } else {
       throw new ValidationError('싫어요');

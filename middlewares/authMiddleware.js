@@ -5,6 +5,7 @@ require('dotenv').config();
 // 유저 인증에 실패하면 403 상태 코드를 반환한다.
 module.exports = async (req, res, next) => {
   try {
+    
     const cookies = req.cookies[process.env.COOKIE_NAME];
     if (!cookies) {
       return res.status(403).send({
@@ -13,9 +14,6 @@ module.exports = async (req, res, next) => {
     }
 
     const [tokenType, tokenValue] = cookies.split(" ");
-    console.log('여기를 지나쳤어요! authMiddleware에요!')
-    console.log(tokenType)
-    console.log(tokenValue)
 
     if (tokenType !== 'Bearer') {
       return res.status(403).send({

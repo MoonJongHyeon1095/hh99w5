@@ -10,10 +10,6 @@ class CommentsController {
       const { postId } = req.params;
       const { userId } = res.locals.user;
       const { nickname } = res.locals.user;
-      console.log(userId);
-      console.log(nickname);
-      console.log(postId)
-      console.log(comment)
 
       if (!userId || !comment || !postId) {
         throw new InvalidParamsError('뭐 하나 빼먹으셨는데?');
