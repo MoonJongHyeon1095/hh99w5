@@ -1,3 +1,4 @@
+const { ValidationError } = require('../exceptions/index.exception');
 const PostRepository = require('../repositories/posts.repository');
 
 class PostService {
@@ -48,10 +49,10 @@ class PostService {
       title,
       content
     );
-    
-    console.log(createPostData)
+
+    console.log(createPostData);
     return {
-      postId: createPostData.null,
+      postId: createPostData.postId,
       userId: createPostData.userId,
       nickname: createPostData.nickname,
       title: createPostData.title,
@@ -63,7 +64,7 @@ class PostService {
 
   updatePost = async (postId, userId, title, content) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error("게시글이 존재하지 않는데요.");
+    if (!findPost) throw new Error('게시글이 존재하지 않는데요.');
 
     await this.postRepository.updatePost(postId, userId, title, content);
 
@@ -83,7 +84,7 @@ class PostService {
 
   deletePost = async (postId, userId) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error("게시글이 존하지 않는데요.");
+    if (!findPost) throw new Error('게시글이 존하지 않는데요.');
 
     await this.postRepository.deletePost(postId, userId);
 
@@ -97,6 +98,65 @@ class PostService {
       createdAt: findPost.createdAt,
       updatedAt: findPost.updatedAt,
     };
+  };
+
+  //좋아요 게시글 조회
+  getPostLike = async (userId ) => {
+    const Likes = await this.postRepository.getPostLike({userId});
+    console.log(Likes)
+
+    let likeList = [];
+    for( const like of Likes ){
+      likeList.push({ Post : like.Post })
+    }
+    console.log(likeList)
+
+    return likeList.sort((a, b) => {
+      return b.likes - a.likes;
+    });
+
+    // return likeList.map((Like) => {
+    //   return {
+    //     postId: Like.postId,
+    //     userId: Like.userId,
+    //     nickname: Like.nickname,
+    //     title: Like.title,
+    //     likes: Like.likes,
+    //     createdAt: Like.createdAt,
+    //     updatedAt: Like.updatedAt,
+    //   };
+    // });
+  };
+
+  updatePostLike = async (userId, postId) => {
+    const isLike = await this.postRepository.findPostLike({ userId, postId });
+    if (!isLike) {
+      const LikeData = await this.postRepository.createPostLike({userId, postId});
+      console.log(LikeData);
+      return {
+        postId: LikeData.postId,
+        userId: LikeData.userId,
+        nickname: LikeData.nickname,
+        title: LikeData.title,
+        likes: LikeData.likes,
+      };
+    } else if (isLike) {
+      const LikeData = await this.postRepository.deletePostLike({
+        userId,
+        postId,
+      });
+
+      console.log(LikeData);
+      return {
+        postId: LikeData.postId,
+        userId: LikeData.userId,
+        nickname: LikeData.nickname,
+        title: LikeData.title,
+        likes: LikeData.likes,
+      };
+    } else {
+      throw new ValidationError('싫어요');
+    }
   };
 }
 

@@ -1,11 +1,14 @@
+const { DuplicateDBDataError, ValidationError } = require("../exceptions/index.exception");
 const UserRepository = require("../repositories/Users.repository");
 
 class UserService {
     userRepository = new UserRepository();
 
     createUser = async ( nickname, password ) => {
-      const existUser = await this.userRepository.findByNickname(nickname);
-      if (existUser.length) throw new Error('중복된 닉네임 입니다.');
+      const isExistUser = await this.userRepository.findByNickname(nickname);
+      if (isExistUser.nickname === nickname) {
+        throw new DuplicateDBDataError('동일한 Nickname을 가진 User가 이미 존재합니다.')
+      }
 
       const createUserData = await this.userRepository.createUser(
           nickname,
@@ -21,7 +24,7 @@ class UserService {
 
     findUser = async (nickname, password, ) => {
         const user = await this.userRepository.findUser(nickname, password);
-        if (!user) throw new Error("그런 사람 없어요. 회원가입 했어요?");
+        if (!user) throw new ValidationError("그런 사람 없어요. 회원가입 했어요?");
         
         return {
           userId : user.userId,

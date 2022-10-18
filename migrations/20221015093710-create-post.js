@@ -41,7 +41,9 @@ module.exports = {
         defaultValue: Sequelize.DataTypes.NOW,
       },
       likes: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.DataTypes.INTEGER,
+        defaultValue:0,
       },
     });
   },
