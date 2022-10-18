@@ -19,11 +19,6 @@ class PostsController {
   getPostById = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      if (!postId) {
-        // TODO: Joi를 사용하지 않음
-        throw new InvalidParamsError('게시글이 존재하지 않습니다.');
-      }
-
       const post = await this.postService.findPostById(postId);
 
       res.status(200).json({ data: post });

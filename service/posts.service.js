@@ -1,10 +1,10 @@
-const { ValidationError } = require('../exceptions/index.exception');
+const { ValidationError, InvalidParamsError } = require('../exceptions/index.exception');
 const PostRepository = require('../repositories/posts.repository');
 
 class PostService {
   postRepository = new PostRepository();
 
-  //게시글목록조회 : 토큰필요 없음.
+  //게시글목록조회 : 토큰필요 없음. //비었으면 빈 값 반환
   findAllPost = async () => {
     const allPost = await this.postRepository.findAllPost();
 
@@ -28,6 +28,7 @@ class PostService {
   //게시글 상세 조회 : 토큰필요 없음.
   findPostById = async (postId) => {
     const findPost = await this.postRepository.findPostById(postId);
+    if (!findPost) throw new InvalidParamsError('게시글이 존재하지 않는데요.');
 
     return {
       postId: findPost.postId,
@@ -64,7 +65,7 @@ class PostService {
 
   updatePost = async (postId, userId, title, content) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error('게시글이 존재하지 않는데요.');
+    if (!findPost) throw new InvalidParamsError('게시글이 존재하지 않는데요.');
 
     await this.postRepository.updatePost(postId, userId, title, content);
 
@@ -84,7 +85,7 @@ class PostService {
 
   deletePost = async (postId, userId) => {
     const findPost = await this.postRepository.findPostById(postId);
-    if (!findPost) throw new Error('게시글이 존하지 않는데요.');
+    if (!findPost) throw new InvalidParamsError('게시글이 존하지 않는데요.');
 
     await this.postRepository.deletePost(postId, userId);
 
@@ -129,6 +130,9 @@ class PostService {
   };
 
   updatePostLike = async (userId, postId) => {
+    const findPost = await this.postRepository.findPostById(postId);
+    if (!findPost) throw new InvalidParamsError('게시글이 존하지 않는데요.');
+
     const isLike = await this.postRepository.findPostLike({ userId, postId });
     if (!isLike) {
       const LikeData = await this.postRepository.createPostLike({userId, postId});
