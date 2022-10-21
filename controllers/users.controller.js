@@ -33,12 +33,14 @@ class UsersController {
         throw new ValidationError('닉네임이랑 비번이 그게 뭐에요.')
       
       // 비밀번호 hash
-      const hashed = await bcrypt.hash(password, 12);  
+      const hashed = await bcrypt.hash(password, 12);
+      
+      //const users = Object.create({ nickname, password: hashed });
 
+      // hash된 유저 정보를 service로 전달
       // 서비스 계층에 구현된 createUser 로직을 실행합니다.
       const createUserData = await this.userService.createUser(
-        nickname,
-        hashed
+        {nickname, hashed}
       );
       res
         .status(201)
@@ -66,33 +68,15 @@ class UsersController {
         throw new InvalidParamsError('뭐 하나 빼먹으셨는데?');
       }   
 
-      const user = await this.userService.findUser(nickname, password);
+      const token = await this.userService.findUser(req, res);
       
-      if (!user) {
-        throw new ValidationError('그런 사람 없대요.');
-      }  
-
       
-      const expires = new Date();
-      expires.setMinutes(expires.getMinutes() + 60); //쿠키 만료시간 60분
-
-      const token = jwt.sign(
-        { userId: user.userId },
-        process.env.SECRET_KEY,
-        { expiresIn: 60 * 24 }
-        // 일단 24시간짜리로 실험.
-      );
-
-      res.cookie(process.env.COOKIE_NAME, `Bearer ${token}`, {
-        expires: expires,
-      });
-      
-      //const userId = user.userId
-      //const token = this.tokenfactory.setToken(userId)
+      // const userId = user.userId
+      // const token = this.tokenfactory.setToken(userId)
 
       return res
         .status(200)
-        .json({ token, data: user, message: '로그인이 되었다.' });
+        .json({ token, message: '로그인이 되었다.' });
     } catch (error) {
       next(error)
     }

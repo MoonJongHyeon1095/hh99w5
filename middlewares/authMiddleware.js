@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 require('dotenv').config();
+const tokenFactory = require('../util/tokenFactory')
 
 // 유저 인증에 실패하면 403 상태 코드를 반환한다.
 module.exports = async (req, res, next) => {
   try {
-    
     const cookies = req.cookies[process.env.COOKIE_NAME];
+  
     if (!cookies) {
       return res.status(403).send({
         errorMessage: '로그인이 필요한 기능입니다.',
